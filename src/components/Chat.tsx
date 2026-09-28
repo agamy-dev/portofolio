@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { ChatEvent, ChatTurn } from "@/lib/chat-protocol";
+import type { AgentEvent as ChatEvent, ChatTurn } from "@/agent/types";
 
 type Source = { title: string; quote: string };
 type Segment = { text: string; sources: number[] }; // indexes into the message's sources
@@ -44,6 +44,8 @@ function applyEvent(msg: Extract<Message, { role: "assistant" }>, event: ChatEve
       return { ...msg, error: event.message };
     case "done":
       return { ...msg, pending: false };
+    default:
+      return msg; // tool events aren't shown in this demo page
   }
 }
 
